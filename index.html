@@ -182,9 +182,9 @@
                     <div class="glass-card p-10 exam-gradient text-white relative overflow-hidden" data-aos="fade-up">
                         <div class="relative z-10">
                             <h3 class="font-black text-2xl mb-3 flex items-center gap-3">🚀 Rent-Free Period</h3>
-                            <p class="text-white/90 text-sm leading-relaxed mb-6 max-w-lg">Amortise the total cost equally across all months of the contract to reflect the true economic cost.</p>
+                            <p class="text-white/90 text-sm leading-relaxed mb-6 max-w-lg">Amortise the expense equally over the period, even if some months are free. The actual monthly expense is found by:</p>
                             <div class="bg-black/20 backdrop-blur-md p-5 rounded-2xl border border-white/10 font-mono text-center shadow-xl">
-                                Total Contract Sum ÷ Total Contract Duration = Monthly Expense
+                                Fixed Payment × (Months to Pay / Total Months in Period)
                             </div>
                         </div>
                         <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
@@ -312,71 +312,71 @@
         const quizData = {
             rent: [
                 {
-                    q: `The accounting year ends on 31 Dec ${currentYear}. On 1 June ${currentYear}, the firm signed a 12-month lease for $3,000/month. The landlord offered 1 month rent-free (June). The firm issued a cheque for the remaining months of the year on 1 June. Record the Bank and P&L (Amortised) for ${currentYear}.`,
+                    q: `Scenario: Year-end 31 Dec ${currentYear}. On 1 Aug ${currentYear}, your firm enters a 12-month lease for a warehouse. Rent is $6,000/month. The landlord offers 2 months rent-free (Aug-Sept). Rent for the remaining 10 months of the contract was paid in full on 1 Aug. Calculate the actual expense for the 5 months (Aug-Dec) using the fixed payment formula and record the Bank and P&L entries.`,
                     account: "Rent Expense",
-                    dr: [{ label: "Bank", amt: "18000" }, { label: "Accrued c/f", amt: "3000" }],
-                    cr: [{ label: "P&L", amt: "21000" }],
-                    hint: "Total rent for 11 paid months is $33,000. Amortised monthly is $2,750 ($33k/12). From June to Dec (7 months), P&L is $19,250. Paid was $18k (June-Dec minus June). Difference is accrued."
+                    dr: [{ label: "Bank", amt: "60000" }],
+                    cr: [{ label: "P&L", amt: "25000" }, { label: "Prepaid c/f", amt: "35000" }],
+                    hint: "Formula: $6,000 * (10/12) = $5,000 monthly expense. For 5 months elapsed (Aug-Dec), P&L = $25,000. Bank paid = $6,000 * 10 = $60,000. Difference is Prepaid c/f."
                 },
                 {
-                    q: `For the year ended 31 Dec ${currentYear}, office rent was $4,000 monthly. In Dec ${currentYear-1}, the firm had already settled the rent for Jan ${currentYear}. Total cheques issued in ${currentYear} amounted to $40,000. Record the opening adjustment and P&L.`,
+                    q: `Scenario: Year-end 31 Dec ${currentYear}. Monthly rent was $8,000. On 1 Oct ${currentYear}, rent increased to $10,000. Rent for Dec ${currentYear} remained unpaid, while rent for Jan ${currentYear+1} ($10,000) was paid early in Dec. Total payments in ${currentYear} were $102,000. Record the Bank, P&L, and adjustments.`,
                     account: "Rent Expense",
-                    dr: [{ label: "Bank", amt: "40000" }, { label: "Prepaid b/f", amt: "4000" }, { label: "Accrued c/f", amt: "4000" }],
-                    cr: [{ label: "P&L", amt: "48000" }],
-                    hint: "Jan was paid last year (Prepaid b/f). Dec rent is still unpaid (Accrued c/f)."
+                    dr: [{ label: "Bank", amt: "102000" }, { label: "Accrued c/f", amt: "10000" }],
+                    cr: [{ label: "P&L", amt: "102000" }, { label: "Prepaid c/f", amt: "10000" }],
+                    hint: "P&L should be ($8,000 * 9) + ($10,000 * 3) = $102,000. Since $102,000 was paid, but $10,000 was for next year and $10,000 for this year is unpaid, the values happen to balance."
                 },
                 {
-                    q: `A 10-month contract was signed on 1 Oct ${currentYear} at $5,000/month. No cash has been paid as of 31 Dec ${currentYear}. Record the adjustment for the current period.`,
+                    q: `Scenario: A rent-free period of 3 months was granted for a 15-month lease starting 1 Nov ${currentYear}. Standard rent is $4,000. No payments have been made. Record the adjustment for the months of Nov and Dec ${currentYear}.`,
                     account: "Rent Expense",
-                    dr: [{ label: "Accrued c/f", amt: "15000" }],
-                    cr: [{ label: "P&L", amt: "15000" }],
-                    hint: "Oct, Nov, Dec (3 months) are unpaid. Use Accrued c/f."
+                    dr: [{ label: "Accrued c/f", amt: "6400" }],
+                    cr: [{ label: "P&L", amt: "6400" }],
+                    hint: "Expense = $4,000 * (12/15) = $3,200 per month. For 2 months (Nov-Dec), total is $6,400."
                 }
             ],
             expense: [
                 {
-                    q: `At 1 Jan ${currentYear}, wages of $2,500 for Dec ${currentYear-1} remained unpaid. During ${currentYear}, total wages of $35,000 were paid via bank. On 31 Dec ${currentYear}, wages of $3,000 for the current month were still owing. Record the b/f, Bank, and P&L.`,
-                    account: "Wages Expense",
-                    dr: [{ label: "Bank", amt: "35000" }, { label: "Accrued c/f", amt: "3000" }],
-                    cr: [{ label: "Accrued b/f", amt: "2500" }, { label: "P&L", amt: "35500" }],
-                    hint: "Accrued b/f is a liability (Cr). Accrued c/f increases Dr."
+                    q: `Scenario: Professional fees account showed a balance of $12,000 paid via bank. This included a retainer of $4,000 covering the period 1 Sept ${currentYear} to 31 Aug ${currentYear+1}. Also, an invoice for $1,500 dated Dec ${currentYear} is still outstanding. Record the Bank, Accrued, and P&L.`,
+                    account: "Professional Fees",
+                    dr: [{ label: "Bank", amt: "12000" }, { label: "Accrued c/f", amt: "1500" }],
+                    cr: [{ label: "Prepaid c/f", amt: "2667" }, { label: "P&L", amt: "10833" }],
+                    hint: "Retainer: $4,000 * 8/12 months is prepaid ($2,667). Accrued is $1,500. P&L is the balancing figure."
                 },
                 {
-                    q: `In the previous year (${currentYear-1}), the firm paid $1,200 for an insurance policy covering Jan-Mar ${currentYear}. In ${currentYear}, a new premium of $5,000 was paid for the rest of the year. Record the opening adjustment and Bank.`,
-                    account: "Insurance Expense",
-                    dr: [{ label: "Prepaid b/f", amt: "1200" }, { label: "Bank", amt: "5000" }],
-                    cr: [{ label: "P&L", amt: "6200" }],
-                    hint: "Insurance paid last year for this year is Prepaid b/f (Dr)."
+                    q: `Scenario: Advertising expense paid during the year was $15,000. This includes $3,000 for a campaign running from 1 Dec ${currentYear} to 28 Feb ${currentYear+1}. Record the Bank and P&L for ${currentYear}.`,
+                    account: "Advertising",
+                    dr: [{ label: "Bank", amt: "15000" }],
+                    cr: [{ label: "Prepaid c/f", amt: "2000" }, { label: "P&L", amt: "13000" }],
+                    hint: "$3,000 covers 3 months. Dec is current year, Jan-Feb (2 months) is prepaid ($2,000)."
                 },
                 {
-                    q: `Electricity paid during ${currentYear} was $8,800. Investigation shows this included a $600 deposit for a new meter and $400 for electricity used in Jan ${currentYear+1}. Record the P&L and closing adjustment.`,
-                    account: "Electricity",
-                    dr: [{ label: "Bank", amt: "8800" }],
-                    cr: [{ label: "Prepaid c/f", amt: "1000" }, { label: "P&L", amt: "7800" }],
-                    hint: "Deposit and next year's payment are both Prepaid c/f (Cr)."
+                    q: `Scenario: At 1 Jan ${currentYear}, accrued utility bills were $1,200. Total bank payments in ${currentYear} were $14,000. On 31 Dec ${currentYear}, the final quarter's bill ($3,600) has not been paid. Record the opening and closing adjustments.`,
+                    account: "Utilities",
+                    dr: [{ label: "Bank", amt: "14000" }, { label: "Accrued c/f", amt: "3600" }],
+                    cr: [{ label: "Accrued b/f", amt: "1200" }, { label: "P&L", amt: "16400" }],
+                    hint: "Accrued b/f is Cr, Accrued c/f is Dr."
                 }
             ],
             revenue: [
                 {
-                    q: `As at 1 Jan ${currentYear}, a client owed $1,500 for services provided in Dec ${currentYear-1}. In ${currentYear}, the client paid $10,000 in total. No other amounts were outstanding at year-end. Record the b/f and Bank.`,
-                    account: "Service Revenue",
-                    dr: [{ label: "Balance b/f", amt: "1500" }, { label: "P&L", amt: "8500" }],
-                    cr: [{ label: "Bank", amt: "10000" }],
-                    hint: "Revenue owed to us (Asset) is Balance b/f (Dr)."
+                    q: `Scenario: On 1 July ${currentYear}, you leased out a spare office for $5,000/month. The tenant paid $45,000 by cheque during the year. Record the Bank and the necessary Balance c/f to represent the unearned portion.`,
+                    account: "Rental Income",
+                    dr: [{ label: "P&L", amt: "30000" }, { label: "Balance c/f", amt: "15000" }],
+                    cr: [{ label: "Bank", amt: "45000" }],
+                    hint: "Revenue for this year (July-Dec) is 6 months * $5,000 = $30,000. Tenant paid $45,000, so $15,000 is Unearned (Liability - Dr side c/f)."
                 },
                 {
-                    q: `During ${currentYear}, the firm received $24,000 for a 2-year service contract starting 1 July ${currentYear}. Record the Bank receipt and the adjustment at 31 Dec ${currentYear}.`,
-                    account: "Contract Revenue",
-                    dr: [{ label: "P&L", amt: "6000" }, { label: "Balance c/f", amt: "18000" }],
-                    cr: [{ label: "Bank", amt: "24000" }],
-                    hint: "Only 6 months of revenue belongs to this year. 18 months is Unearned (Balance c/f on Dr side)."
-                },
-                {
-                    q: `Commission of $5,000 was received in ${currentYear}. This included $800 received in advance for ${currentYear+1}, and excludes $400 commission earned in ${currentYear} but not yet received. Record all adjustments.`,
+                    q: `Scenario: Commission of $8,000 was earned during the year. At the start of the year, $1,200 was still receivable from the previous period. Total cash received was $7,500. Record the b/f, P&L, and Bank entries.`,
                     account: "Commission Revenue",
-                    dr: [{ label: "Balance c/f", amt: "800" }, { label: "P&L", amt: "4600" }],
-                    cr: [{ label: "Bank", amt: "5000" }, { label: "Balance c/f", amt: "400" }],
-                    hint: "Unearned is Dr Balance c/f. Receivable is Cr Balance c/f."
+                    dr: [{ label: "Balance b/f", amt: "1200" }, { label: "P&L", amt: "8000" }],
+                    cr: [{ label: "Bank", amt: "7500" }, { label: "Balance c/f", amt: "1700" }],
+                    hint: "Start with Balance b/f $1,200 (Asset - Dr). Add P&L $8,000 (Dr). Subtract Bank $7,500 (Cr). Balance c/f is $1,700 (Cr)."
+                },
+                {
+                    q: `Scenario: Royalties of $10,000 were received. $2,000 of this was for work done in ${currentYear-1} (not previously recorded as receivable), and $1,500 is for next year's license. Record the P&L.`,
+                    account: "Royalty Income",
+                    dr: [{ label: "Balance c/f", amt: "1500" }, { label: "P&L", amt: "8500" }],
+                    cr: [{ label: "Bank", amt: "10000" }],
+                    hint: "The $2,000 is treated as revenue of this year since it wasn't recorded last year. Only the $1,500 advance is excluded from P&L."
                 }
             ]
         };
@@ -447,7 +447,7 @@
             labels.forEach(i => {
                 const val = i.value.trim().toLowerCase();
                 const ans = i.dataset.ansLabel.toLowerCase();
-                if (val === ans || (ans === "p&l" && val === "profit and loss")) {
+                if (val === ans || (ans === "p&l" && val === "profit and loss") || (ans === "bank" && val === "cash at bank")) {
                     i.classList.add('correct-input'); i.classList.remove('wrong-input');
                 } else {
                     i.classList.add('wrong-input'); allCorrect = false;
